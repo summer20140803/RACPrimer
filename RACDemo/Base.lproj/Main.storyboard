@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -16,11 +17,70 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YZh-Iz-J06">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="jqp-dE-y6U"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="72L-Ad-b88">
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="iww-qF-DVO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iC-3b-Zan">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="lzG-Gc-Dpz"/>
+                                    <constraint firstAttribute="width" constant="60" id="pCn-eE-8BH"/>
+                                </constraints>
+                                <state key="normal" title="跳转"/>
+                                <connections>
+                                    <action selector="presentNextVC:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oHq-hf-ZcG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1AD-ty-xQe">
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="gV1-mV-vYn"/>
+                                    <constraint firstAttribute="height" constant="40" id="iNB-PZ-Iox"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="点击发送验证码">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="9iC-3b-Zan" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="4g7-Us-FmZ"/>
+                            <constraint firstAttribute="trailing" secondItem="YZh-Iz-J06" secondAttribute="trailing" constant="50" id="F6x-sR-O0U"/>
+                            <constraint firstItem="YZh-Iz-J06" firstAttribute="top" secondItem="72L-Ad-b88" secondAttribute="bottom" constant="40" id="I48-FV-0sN"/>
+                            <constraint firstItem="1AD-ty-xQe" firstAttribute="top" secondItem="9iC-3b-Zan" secondAttribute="bottom" constant="80" id="Iwc-Yh-1TV"/>
+                            <constraint firstAttribute="trailing" secondItem="72L-Ad-b88" secondAttribute="trailing" constant="50" id="MBo-yM-czp"/>
+                            <constraint firstItem="72L-Ad-b88" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="50" id="QX8-21-gm8"/>
+                            <constraint firstItem="YZh-Iz-J06" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="50" id="XTB-mq-SUq"/>
+                            <constraint firstItem="72L-Ad-b88" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="100" id="dyR-fQ-d0w"/>
+                            <constraint firstItem="9iC-3b-Zan" firstAttribute="top" secondItem="YZh-Iz-J06" secondAttribute="bottom" constant="50" id="sbM-5X-Wjb"/>
+                            <constraint firstItem="1AD-ty-xQe" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="wet-pG-AoG"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="nameLabel" destination="72L-Ad-b88" id="yWB-dq-FZ0"/>
+                        <outlet property="presentButton" destination="9iC-3b-Zan" id="s2G-ji-A7e"/>
+                        <outlet property="receiveCodeBtn" destination="1AD-ty-xQe" id="8Zj-Fp-snn"/>
+                        <outlet property="textField" destination="YZh-Iz-J06" id="nVA-kN-791"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="140" y="138.98050974512745"/>
         </scene>
     </scenes>
 </document>

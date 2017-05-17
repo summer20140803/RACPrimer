@@ -13,6 +13,10 @@
 		18E3A6921EC193BE00B74AFD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18E3A6901EC193BE00B74AFD /* Main.storyboard */; };
 		18E3A6941EC193BE00B74AFD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18E3A6931EC193BE00B74AFD /* Assets.xcassets */; };
 		18E3A6971EC193BE00B74AFD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18E3A6951EC193BE00B74AFD /* LaunchScreen.storyboard */; };
+		18E3A6A01EC315B300B74AFD /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E3A69F1EC315B300B74AFD /* UserModel.m */; };
+		18E3A6C61EC408EC00B74AFD /* NextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E3A6C51EC408EC00B74AFD /* NextViewController.m */; };
+		18E3A6D21EC93C1C00B74AFD /* UserService.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E3A6D11EC93C1C00B74AFD /* UserService.m */; };
+		18E3A6D51EC9497800B74AFD /* UserViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E3A6D41EC9497800B74AFD /* UserViewModel.m */; };
 		ECE55FF1F3D35337F6E1E2C0 /* Pods_RACDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62405C2939A90E0E7C986C1B /* Pods_RACDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +31,14 @@
 		18E3A6931EC193BE00B74AFD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18E3A6961EC193BE00B74AFD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18E3A6981EC193BE00B74AFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18E3A69E1EC315B300B74AFD /* UserModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserModel.h; sourceTree = "<group>"; };
+		18E3A69F1EC315B300B74AFD /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
+		18E3A6C41EC408EC00B74AFD /* NextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NextViewController.h; sourceTree = "<group>"; };
+		18E3A6C51EC408EC00B74AFD /* NextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NextViewController.m; sourceTree = "<group>"; };
+		18E3A6D01EC93C1C00B74AFD /* UserService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserService.h; sourceTree = "<group>"; };
+		18E3A6D11EC93C1C00B74AFD /* UserService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserService.m; sourceTree = "<group>"; };
+		18E3A6D31EC9497800B74AFD /* UserViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewModel.h; sourceTree = "<group>"; };
+		18E3A6D41EC9497800B74AFD /* UserViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewModel.m; sourceTree = "<group>"; };
 		2A5558879EAEB5B9E1281265 /* Pods-RACDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-RACDemo/Pods-RACDemo.release.xcconfig"; sourceTree = "<group>"; };
 		62405C2939A90E0E7C986C1B /* Pods_RACDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RACDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E61A264E912A643B1612926 /* Pods-RACDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RACDemo/Pods-RACDemo.debug.xcconfig"; sourceTree = "<group>"; };
@@ -78,6 +90,14 @@
 				18E3A68B1EC193BE00B74AFD /* AppDelegate.m */,
 				18E3A68D1EC193BE00B74AFD /* ViewController.h */,
 				18E3A68E1EC193BE00B74AFD /* ViewController.m */,
+				18E3A6C41EC408EC00B74AFD /* NextViewController.h */,
+				18E3A6C51EC408EC00B74AFD /* NextViewController.m */,
+				18E3A69E1EC315B300B74AFD /* UserModel.h */,
+				18E3A69F1EC315B300B74AFD /* UserModel.m */,
+				18E3A6D31EC9497800B74AFD /* UserViewModel.h */,
+				18E3A6D41EC9497800B74AFD /* UserViewModel.m */,
+				18E3A6D01EC93C1C00B74AFD /* UserService.h */,
+				18E3A6D11EC93C1C00B74AFD /* UserService.m */,
 				18E3A6901EC193BE00B74AFD /* Main.storyboard */,
 				18E3A6931EC193BE00B74AFD /* Assets.xcassets */,
 				18E3A6951EC193BE00B74AFD /* LaunchScreen.storyboard */,
@@ -226,8 +246,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18E3A6D51EC9497800B74AFD /* UserViewModel.m in Sources */,
+				18E3A6C61EC408EC00B74AFD /* NextViewController.m in Sources */,
 				18E3A68F1EC193BE00B74AFD /* ViewController.m in Sources */,
 				18E3A68C1EC193BE00B74AFD /* AppDelegate.m in Sources */,
+				18E3A6A01EC315B300B74AFD /* UserModel.m in Sources */,
+				18E3A6D21EC93C1C00B74AFD /* UserService.m in Sources */,
 				18E3A6891EC193BE00B74AFD /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,11 +371,13 @@
 			baseConfigurationReference = 7E61A264E912A643B1612926 /* Pods-RACDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				DEVELOPMENT_TEAM = 6K3MJR566S;
 				INFOPLIST_FILE = RACDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = szy.independent.RACDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Debug;
 		};
@@ -360,11 +386,13 @@
 			baseConfigurationReference = 2A5558879EAEB5B9E1281265 /* Pods-RACDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				DEVELOPMENT_TEAM = 6K3MJR566S;
 				INFOPLIST_FILE = RACDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = szy.independent.RACDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Release;
 		};
@@ -387,6 +415,7 @@
 				18E3A69D1EC193BE00B74AFD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
