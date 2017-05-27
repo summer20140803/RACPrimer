@@ -33,7 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self syntax_collect];
+    [self syntax_filter];
 }
 
 
@@ -221,11 +221,21 @@
 
 - (void)syntax_filter {
     // filter
-    [[self.textField.rac_textSignal filter:^BOOL(NSString * _Nullable value) {
-        return [value hasPrefix:@"szy"];
-    }] subscribeNext:^(NSString * _Nullable x) {
-        NSLog(@"this sentence has prefix 'szy' : %@", x);
+    __block NSMutableArray *array = @[].mutableCopy;
+    __block BOOL lock = YES;
+    [[@[@1,@2,@3].rac_sequence.signal filter:^BOOL(NSNumber * _Nullable value) {
+        NSLog(@"filter");
+        return (value.integerValue != 1);
+    }]
+    subscribeNext:^(NSNumber * _Nullable x) {
+        [array addObject:x];
+        NSLog(@"经过过滤的元素:%@", x);
+    } completed:^{
+        //唤醒主线程
+        lock = NO;
     }];
+    do {} while (lock);
+    NSLog(@"主线程 - result : %@", array);
 }
 
 - (void)syntax_combineLatest {
@@ -249,6 +259,7 @@
 - (void)syntax_merge {
     // merge(合并消息)
     // 主要用来实现同时发起多个请求，将多个消息合并成一个消息，会调用所有被合并的消息的sendNext方法(只要有任何一个消息发送sendNext，就会触发订阅回调，区别于combineLastest)，最后再sendCompelete
+    // 场景：分别请求N个不同的接口，然后分别渲染各自的UI
     RACSignal *signal1 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
         // 模拟一下异步请求
         [self.service simulationRequest:^{
@@ -262,11 +273,42 @@
         [self.service simulationRequest:^{
             [subscriber sendNext:@"网络请求2成功！"];
             [subscriber sendCompleted];
+        } simulationDelay:5];
+        return nil;
+    }];
+    [[RACSignal merge:@[signal1, signal2]] subscribeNext:^(id  _Nullable x) {
+        NSLog(@"获取到的网络数据：%@", x);
+    }];
+}
+
+- (void)syntax_zip {
+    // zip
+    // 等待多个消息都执行一次sendNext，才执行一次订阅回调，返回tuple类型的数据
+    // 场景：多个接口都返回后统一渲染UI
+    RACSignal *signal1 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        // 模拟一下异步请求
+        [self.service simulationRequest:^{
+            [subscriber sendNext:@"request-1 success!"];
+            [subscriber sendCompleted];
+        } simulationDelay:2];
+        return nil;
+    }];
+    RACSignal *signal2 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        // 模拟一下异步请求
+        [self.service simulationRequest:^{
+            [subscriber sendNext:@"request-2 success!"];
+            [subscriber sendCompleted];
         } simulationDelay:3];
         return nil;
     }];
-    [[signal1 merge:signal2] subscribeNext:^(id  _Nullable x) {
-        NSLog(@"获取到的网络数据：%@", x);
+    [[RACSignal zip:@[signal1, signal2]] subscribeNext:^(id  _Nullable x) {
+        /* log:
+         2017-05-17 18:16:10.090 RACDemo[43123:8589320] fetch data：<RACTuple: 0x6080000063d0> (
+             "request-1 success!",
+             "request-2 success!"
+         )
+         */
+        NSLog(@"fetch data：%@", x);
     }];
 }
 
@@ -336,26 +378,51 @@
 
 - (void)syntax_flattenMap {
     // flattenMap ≈ map + flatten
-    // 事件完成block后有可能会返回signal的实例，这个时候外部信号中就会包含一个内部信号，这个时候使用map去将信号转换为另一种信号，造成了嵌套的麻烦。所以说通过flattenMap将事件从内部信号发送到外部信号，并且映射到另外一个信号上去，这样这个过程就变得扁平化。Signal被按序的链接起来执行异步操作，而且不用嵌套block。
-    RACSignal *signal = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+    // 事件完成block后有可能会返回signal的实例，这个时候外部信号中就会包含一个内部信号，这个时候使用map去将信号转换为另一种信号，造成了嵌套的麻烦。所以说通过flattenMap将事件从内部信号发送到外部信号，并且映射到另外一个信号上去，这样这个过程就变得扁平化。Signal被按序的链接起来执行异步操作，而且不用嵌套block
+    // 场景：N个接口串联，上一个请求完成继续下一个请求，一旦前面的请求失败，则中断信号
+    RACSignal *signal1 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
         // 模拟一下异步请求
         [self.service simulationRequest:^{
-            [subscriber sendNext:@"网络请求成功！"];
+            [subscriber sendNext:@"网络请求1成功！"];
+            [subscriber sendCompleted];
+        } simulationDelay:2];
+        return nil;
+    }];
+    RACSignal *signal2 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        // 模拟一下异步请求
+        [self.service simulationRequest:^{
+            [subscriber sendNext:@"网络请求2成功！"];
+            [subscriber sendCompleted];
+        } simulationDelay:2];
+        return nil;
+    }];
+    RACSignal *signal3 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        // 模拟一下异步请求
+        [self.service simulationRequest:^{
+            [subscriber sendNext:@"网络请求3成功！"];
             [subscriber sendCompleted];
         } simulationDelay:2];
         return nil;
     }];
     // 1.如果不用flattenMap，则会出现block嵌套的现象
-//    [[self.presentButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
-//        [signal subscribeNext:^(id  _Nullable x) {
+//    [signal1 subscribeNext:^(__kindof UIControl * _Nullable x) {
 //            NSLog(@"接收到的消息：%@", x);
-//        }];
+    //        [signal2 subscribeNext:^(id  _Nullable x) {
+    //            NSLog(@"接收到的消息：%@", x);
+//                [signal3 subscribeNext:^(id  _Nullable x) {
+//                    NSLog(@"接收到的消息：%@", x);
+//                }];
+    //        }];
 //    }];
     // 2.如果用flattenMap，就可以避免block嵌套
-    [[[self.presentButton rac_signalForControlEvents:UIControlEventTouchUpInside] flattenMap:^__kindof RACSignal * _Nullable(__kindof UIControl * _Nullable value) {
-        return signal;
-    }] subscribeNext:^(id  _Nullable x) {
-        NSLog(@"接收到的消息：%@", x);
+    [[[signal1 flattenMap:^__kindof RACSignal * _Nullable(id  _Nullable requestResult) {
+        NSLog(@"接收到请求1的消息：%@", requestResult);
+        return signal2;
+    }] flattenMap:^__kindof RACSignal * _Nullable(id  _Nullable requestResult) {
+        NSLog(@"接收到请求2的消息：%@", requestResult);
+        return signal3;
+    }] subscribeNext:^(id  _Nullable requestResult) {
+        NSLog(@"接收到请求3的消息：%@", requestResult);
     }];
 }
 
@@ -420,6 +487,53 @@
         return signal2;
     }] subscribeNext:^(id  _Nullable x) {
         NSLog(@"获取到的网络数据：%@", x);
+    }];
+}
+
+- (void)syntax_tryAndCatch {
+    // error传递链(配合try和catch)
+    // FRP具备这样一个特点，信号因为进行组合从而得到了一个数据链，而数据链的任一节点发出错误信号，都可以顺着这个链条最终交付给订阅者。这就正好解决了异常处理的问题
+    RACSignal *signal1 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        // 模拟一下异步请求
+        [self.service simulationRequest:^{
+            [subscriber sendNext:nil];
+            [subscriber sendCompleted];
+        } simulationDelay:2];
+        return nil;
+    }];
+    RACSignal *signal2 = [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        // 模拟一下异步请求
+        [self.service simulationRequest:^{
+            [subscriber sendNext:@"网络请求2成功！"];
+            [subscriber sendCompleted];
+        } simulationDelay:2];
+        return nil;
+    }];
+    
+    // 串联N个请求，生成请求依赖，一旦其中有请求响应报错，则产生的error会顺着请求链，最终被catch捕获，然后return给最终的订阅者
+    [[[[[signal1 try:^BOOL(id  _Nullable requestData, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
+        if (requestData) {
+            NSLog(@"接收到请求1返回数据：%@", requestData);
+            return YES;
+        } else {
+            *errorPtr = [NSError errorWithDomain:@"RACDemo" code:0 userInfo:@{NSLocalizedDescriptionKey : @"请求1返回数据异常!"}];
+            return NO;
+        }
+    }] flattenMap:^__kindof RACSignal * _Nullable(id  _Nullable requestData) {
+        return signal2;
+    }] try:^BOOL(id  _Nullable requestData, NSError * _Nullable __autoreleasing * _Nullable errorPtr) {
+        if (requestData) {
+            return YES;
+        } else {
+            *errorPtr = [NSError errorWithDomain:@"RACDemo" code:0 userInfo:@{NSLocalizedDescriptionKey : @"请求2返回数据异常!"}];
+            return NO;
+        }
+    }] catch:^RACSignal * _Nonnull(NSError * _Nonnull error) {
+        return [RACSignal error:error];
+    }] subscribeNext:^(id  _Nullable requestData) {
+        NSLog(@"接收到请求2返回数据：%@", requestData);
+    } error:^(NSError * _Nullable error) {
+        NSLog(@"error:%@", error.localizedDescription);
     }];
 }
 
@@ -688,7 +802,41 @@
     }];
 }
 
-
+#pragma mark 函数式编程举例
+// 需求：实现一个每秒发送值为0、1、2、3...10的递增整数信号
+// 比较常规实现和函数式实现(即无变量)
+- (void)demo_frpCode {
+    // 常规实现(掺杂着太多中间变量)
+//    [[RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+//        __block int i = 0;
+//        __block void (^increaseBlock)();
+//        increaseBlock = ^{
+//            if (i > 10) {
+//                increaseBlock = nil;
+//                return;
+//            }
+//            [subscriber sendNext:@(i)];
+//            i ++;
+//            [[RACScheduler mainThreadScheduler] afterDelay:1 schedule:^{
+//                !increaseBlock ? : increaseBlock();
+//            }];
+//        };
+//        increaseBlock();
+//        return nil;
+//    }] subscribeNext:^(id  _Nullable x) {
+//        NSLog(@"数据：%@", x);
+//    }];
+    
+    // FRP编程实现(无状态变量)
+    [[[[[[[RACSignal return:@1] repeat] take:10] scanWithStart:@0 reduce:^id _Nullable(NSNumber *  _Nullable running, NSNumber *  _Nullable next) {
+        return @(running.integerValue + next.integerValue);
+    }] map:^id _Nullable(id  _Nullable value) {
+        return [[RACSignal return:value] delay:1];
+    }] concat]
+    subscribeNext:^(id  _Nullable x) {
+        NSLog(@"数据：%@", x);
+    }];
+}
 
 
 #pragma mark - Getter -
